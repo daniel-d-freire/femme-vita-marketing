@@ -162,8 +162,9 @@ textarea{resize:vertical;min-height:80px;}
 .priority-low{background:var(--green);}
 
 /* CALENDAR */
-.month-nav{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
-.month-name{font-family:'Playfair Display',serif;font-size:19px;min-width:180px;}
+.month-nav{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.month-nav .btn{flex-shrink:0;}
+.month-name{font-family:'Playfair Display',serif;font-size:18px;flex:1;text-align:center;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
 .cal-day-header{text-align:center;font-size:10px;font-weight:500;color:var(--text-light);text-transform:uppercase;padding:5px 0;letter-spacing:.05em;}
 .cal-day{min-height:82px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 7px;cursor:default;transition:border-color .15s;}
@@ -171,6 +172,10 @@ textarea{resize:vertical;min-height:80px;}
 .cal-day.today-cell{border-color:var(--rose);border-width:2px;}
 .cal-day-num{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:4px;}
 .cal-day.today-cell .cal-day-num{color:var(--rose-dark);}
+/* Force detail date row to stack on mobile */
+.detail-date-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px;}
+/* Archive checklist column — never clip */
+.archive-cl-cell{white-space:nowrap;min-width:90px;}
 
 /* ARCHIVE */
 .filter-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
@@ -238,12 +243,15 @@ textarea{resize:vertical;min-height:80px;}
   .content{padding:16px;}
   .modal{padding:18px;}
   .modal-grid{grid-template-columns:1fr;}
+  .detail-date-row{grid-template-columns:1fr !important;}
   .kanban-board{grid-template-columns:repeat(6,minmax(160px,1fr));}
   .archive-table th:nth-child(3),.archive-table td:nth-child(3){display:none;}
+  .month-name{font-size:15px;}
 }
 @media(max-width:480px){
   .stats-grid{grid-template-columns:1fr 1fr;}
   .topbar-actions .btn-outline{display:none;}
+  .month-name{font-size:14px;}
 }
 </style>
 </head>
@@ -445,7 +453,14 @@ textarea{resize:vertical;min-height:80px;}
 <div class="modal-overlay" id="modal-idea">
   <div class="modal">
     <div class="modal-header"><h2 class="modal-title">Nova Ideia Rápida</h2><button class="modal-close" onclick="closeModal('modal-idea')">×</button></div>
-    <div class="form-group"><label class="form-label">Ideia</label><textarea id="quick-idea" placeholder="Descreva rapidamente..."></textarea></div>
+    <div class="form-group">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <label class="form-label" style="margin:0">Ideia</label>
+        <button class="mic-btn" id="mic-quick-btn" onclick="toggleMic('quick')" title="Ditar ideia">🎙 <span id="mic-quick-label">Ditar</span></button>
+      </div>
+      <textarea id="quick-idea" placeholder="Descreva rapidamente... ou clique em Ditar para falar."></textarea>
+      <div class="mic-badge" id="mic-badge-quick"><span class="mic-dot"></span><span id="mic-interim-quick">ouvindo…</span></div>
+    </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
       <button class="btn btn-ghost" onclick="closeModal('modal-idea')">Cancelar</button>
       <button class="btn btn-primary" onclick="saveQuickIdea()">Salvar no brainstorm</button>
@@ -463,7 +478,7 @@ textarea{resize:vertical;min-height:80px;}
       </div>
       <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px;" class="detail-date-row">
       <div class="form-group"><label class="form-label">Data de publicação</label><input type="date" id="detail-date"></div>
       <div class="form-group"><label class="form-label">Observações</label><input type="text" id="detail-obs" placeholder="Notas adicionais..."></div>
     </div>
@@ -957,12 +972,12 @@ function renderArchive(filterFmt) {
         <td><span class="post-pill ${FMT_CLASS[p.format]||''}" style="margin:0;display:inline-block">${p.format}</span></td>
         <td><span class="idea-tag ${TAG_CLASS[p.tema]||''}" style="margin:0">${p.tema}</span></td>
         <td style="color:var(--text-muted);white-space:nowrap">${fmt(p.date)||'—'}</td>
-        <td>
-          <div style="display:flex;align-items:center;gap:7px;">
-            <div style="width:50px;height:4px;background:var(--border);border-radius:2px">
+        <td class="archive-cl-cell">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:44px;min-width:44px;height:4px;background:var(--border);border-radius:2px;flex-shrink:0">
               <div style="height:4px;border-radius:2px;background:${pct===100?'var(--green)':'var(--rose)'};width:${pct}%"></div>
             </div>
-            <span style="font-size:11px;color:var(--text-muted)">${pct}%</span>
+            <span style="font-size:11px;color:var(--text-muted);flex-shrink:0">${pct}%</span>
           </div>
         </td>
       </tr>
@@ -1113,60 +1128,58 @@ function toggleMic(target) {
 
 function startMic(target) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    showToast('Ditado de voz não suportado. Use Chrome ou Safari.');
-    return;
-  }
+  if (!SR) { showToast('Ditado de voz não suportado. Use Chrome ou Safari.'); return; }
   recTarget = target;
-  if (!recognition) {
-    recognition = new SR();
-    recognition.lang = 'pt-BR';
-    recognition.continuous = true;
-    recognition.interimResults = true;
+  const boundTarget = target; // captured in closure — immune to later changes in recTarget
 
-    recognition.onresult = (e) => {
-      let interim = '', final = '';
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        const t = e.results[i][0].transcript;
-        e.results[i].isFinal ? (final += t) : (interim += t);
-      }
-      if (final) {
-        const field = recTarget === 'title'
-          ? document.getElementById('idea-title-input')
-          : document.getElementById('idea-desc-input');
-        if (field) {
-          const sep = field.value && !field.value.endsWith(' ') ? ' ' : '';
-          field.value += sep + final.trim();
-        }
-      }
-      const badge = document.getElementById('mic-badge');
-      const txt = document.getElementById('mic-interim-text');
-      if (badge && txt) {
-        if (interim) { txt.textContent = interim.slice(0,50)+(interim.length>50?'…':''); badge.classList.add('show'); }
-        else { txt.textContent = 'ouvindo…'; }
-      }
-    };
+  recognition = new SR();
+  recognition.lang = 'pt-BR';
+  recognition.continuous = true;
+  recognition.interimResults = true;
 
-    recognition.onerror = (e) => {
-      if (e.error === 'not-allowed') {
-        showToast('Permissão de microfone negada. Clique no ícone de cadeado na barra do navegador para permitir.');
-      } else if (e.error !== 'no-speech') {
-        showToast('Erro no microfone: ' + e.error);
+  recognition.onresult = (e) => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      e.results[i].isFinal ? (final += t) : (interim += t);
+    }
+    if (final) {
+      const fieldId = boundTarget === 'title' ? 'idea-title-input'
+                    : boundTarget === 'quick' ? 'quick-idea'
+                    : 'idea-desc-input';
+      const field = document.getElementById(fieldId);
+      if (field) {
+        const sep = field.value && !field.value.endsWith(' ') ? ' ' : '';
+        field.value += sep + final.trim();
       }
-      stopMic();
-    };
+    }
+    const badge = document.getElementById(boundTarget === 'quick' ? 'mic-badge-quick' : 'mic-badge');
+    const txt = document.getElementById(boundTarget === 'quick' ? 'mic-interim-quick' : 'mic-interim-text');
+    if (badge && txt) {
+      if (interim) { txt.textContent = interim.slice(0,50)+(interim.length>50?'…':''); badge.classList.add('show'); }
+      else { txt.textContent = 'ouvindo…'; }
+    }
+  };
 
-    recognition.onend = () => {
-      if (isRecording) { try { recognition.start(); } catch(_) {} }
-    };
-  }
+  recognition.onerror = (e) => {
+    if (e.error === 'not-allowed') {
+      showToast('Permissão negada. Clique no cadeado na barra do navegador e permita o microfone.');
+    } else if (e.error !== 'no-speech') {
+      showToast('Erro no microfone: ' + e.error);
+    }
+    stopMic();
+  };
+
+  recognition.onend = () => {
+    if (isRecording) { try { recognition.start(); } catch(_) {} }
+  };
 
   try {
     recognition.start();
     isRecording = true;
     setMicUI(target, true);
   } catch(e) {
-    showToast('Não foi possível iniciar. Certifique-se de acessar pelo HTTPS.');
+    showToast('Não foi possível iniciar. Acesse pelo HTTPS.');
   }
 }
 
@@ -1175,24 +1188,27 @@ function stopMic() {
   if (recognition) { try { recognition.stop(); } catch(_) {} recognition = null; }
   setMicUI(recTarget, false);
   document.getElementById('mic-badge')?.classList.remove('show');
+  document.getElementById('mic-badge-quick')?.classList.remove('show');
   recTarget = null;
   showToast('Ditado finalizado ✦');
 }
 
 function setMicUI(target, active) {
-  const btnId = target === 'title' ? 'mic-title-btn' : 'mic-desc-btn';
-  const lblId = target === 'title' ? 'mic-title-label' : 'mic-desc-label';
+  const btnId = target === 'title' ? 'mic-title-btn' : target === 'quick' ? 'mic-quick-btn' : 'mic-desc-btn';
+  const lblId = target === 'title' ? 'mic-title-label' : target === 'quick' ? 'mic-quick-label' : 'mic-desc-label';
   const btn = document.getElementById(btnId);
   const lbl = document.getElementById(lblId);
   if (!btn) return;
   if (active) {
     btn.classList.add('recording');
     if (lbl) lbl.textContent = 'Parar';
-    btn.querySelector('span:first-child') && (btn.querySelector('span:first-child').textContent = '⏹');
+    const icon = btn.childNodes[0];
+    if (icon && icon.nodeType === Node.TEXT_NODE) icon.textContent = '⏹ ';
   } else {
     btn.classList.remove('recording');
     if (lbl) lbl.textContent = 'Ditar';
-    btn.querySelector('span:first-child') && (btn.querySelector('span:first-child').textContent = '🎙');
+    const icon = btn.childNodes[0];
+    if (icon && icon.nodeType === Node.TEXT_NODE) icon.textContent = '🎙 ';
   }
 }
 
