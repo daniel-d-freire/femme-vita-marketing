@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Femme Vita — Central de Marketing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose:#C4667A; --rose-light:#F2E0E5; --rose-dark:#8B3A4F;
+  --blush:#F7EDF0; --sage:#7A9E8E; --sage-light:#E0EDE8;
+  --cream:#FAF7F4; --text:#2C2420; --text-muted:#7A6B65;
+  --text-light:#B09C95; --border:rgba(44,36,32,0.1); --white:#FFFFFF;
+  --amber:#D4873A; --amber-light:#FDF0E0; --blue:#4A7FA5; --blue-light:#E0EDF5;
+  --purple:#7B5EA7; --purple-light:#EDE5F5; --green:#5C8C6A; --green-light:#E0EDE5;
+  --radius:12px; --radius-sm:8px;
+  --shadow:0 2px 12px rgba(44,36,32,0.08); --shadow-hover:0 6px 24px rgba(44,36,32,0.14);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;font-size:14px;}
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:transform .25s;}
+.logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+.logo h1{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--rose-dark);letter-spacing:.02em;}
+.logo p{font-size:10px;color:var(--text-light);margin-top:2px;letter-spacing:.06em;text-transform:uppercase;}
+.nav{padding:12px 10px;flex:1;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text-muted);transition:all .18s;margin-bottom:2px;user-select:none;}
+.nav-item:hover{background:var(--blush);color:var(--rose-dark);}
+.nav-item.active{background:var(--rose-light);color:var(--rose-dark);font-weight:500;}
+.nav-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0;}
+.sidebar-footer{padding:14px 18px;border-top:1px solid var(--border);}
+.dr-badge{display:flex;align-items:center;gap:10px;}
+.dr-avatar{width:32px;height:32px;border-radius:50%;background:var(--rose-light);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:12px;color:var(--rose-dark);font-weight:600;flex-shrink:0;}
+.dr-info p{font-size:12px;font-weight:500;}
+.dr-info span{font-size:10px;color:var(--text-light);}
+
+/* MOBILE HEADER */
+.mobile-header{display:none;align-items:center;justify-content:space-between;padding:0 16px;height:52px;background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;}
+.mobile-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--rose-dark);}
+.hamburger{background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-muted);padding:4px;}
+.mobile-overlay{display:none;position:fixed;inset:0;background:rgba(44,36,32,.4);z-index:99;}
+.mobile-overlay.show{display:block;}
+
+/* MAIN */
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.topbar-title{font-family:'Playfair Display',serif;font-size:16px;}
+.topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+.btn{padding:7px 15px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all .18s;white-space:nowrap;}
+.btn-primary{background:var(--rose);color:white;}
+.btn-primary:hover{background:var(--rose-dark);}
+.btn-outline{background:transparent;color:var(--rose);border:1px solid var(--rose);}
+.btn-outline:hover{background:var(--rose-light);}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--blush);}
+.btn-sm{padding:5px 11px;font-size:12px;}
+.btn-danger{background:transparent;color:#A32D2D;border:1px solid #F09595;}
+.btn-danger:hover{background:#FCEBEB;}
+.content{flex:1;overflow-y:auto;padding:22px 24px;}
+.view{display:none;}
+.view.active{display:block;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+.stat-label{font-size:10px;color:var(--text-light);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
+.stat-value{font-size:22px;font-weight:500;font-family:'Playfair Display',serif;}
+.stat-sub{font-size:10px;color:var(--text-muted);margin-top:3px;}
+.stat-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;flex-wrap:wrap;}
+.section-title{font-family:'Playfair Display',serif;font-size:15px;}
+
+/* PILLS */
+.post-pill{padding:3px 7px;border-radius:5px;font-size:10px;font-weight:500;cursor:pointer;transition:opacity .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;margin-bottom:3px;}
+.post-pill:hover{opacity:.8;}
+.pill-carrossel{background:#EDE5F5;color:#7B5EA7;}
+.pill-reel{background:var(--rose-light);color:var(--rose-dark);}
+.pill-estatico{background:var(--sage-light);color:#3D6B58;}
+.pill-story{background:var(--amber-light);color:#9A5F1A;}
+
+/* BRAINSTORM */
+.brainstorm-input-area{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:20px;}
+.brainstorm-input-area h3{font-family:'Playfair Display',serif;font-size:14px;margin-bottom:13px;color:var(--rose-dark);}
+.brainstorm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+.idea-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;transition:box-shadow .18s;position:relative;}
+.idea-card:hover{box-shadow:var(--shadow-hover);}
+.idea-card.pinned{border-color:var(--rose);}
+.idea-card.pinned::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--rose);border-radius:var(--radius) var(--radius) 0 0;}
+.idea-tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;margin-bottom:8px;}
+.tag-histeroscopia{background:var(--purple-light);color:var(--purple);}
+.tag-fertilidade{background:var(--green-light);color:var(--green);}
+.tag-educativo{background:var(--blue-light);color:var(--blue);}
+.tag-promo{background:var(--amber-light);color:var(--amber);}
+.tag-depoimento{background:var(--rose-light);color:var(--rose-dark);}
+.tag-rotina{background:var(--sage-light);color:var(--sage);}
+.idea-title{font-weight:500;font-size:13px;margin-bottom:5px;line-height:1.4;}
+.idea-desc{font-size:12px;color:var(--text-muted);line-height:1.55;}
+.idea-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:6px;}
+.idea-format{font-size:10px;color:var(--text-light);}
+.idea-actions{display:flex;gap:3px;flex-shrink:0;}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:14px;opacity:.5;transition:opacity .15s;padding:3px 5px;border-radius:4px;}
+.icon-btn:hover{opacity:1;background:var(--blush);}
+
+/* FORM */
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-group{display:flex;flex-direction:column;gap:4px;}
+.form-label{font-size:10px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;}
+input[type="text"],input[type="date"],textarea,select{font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--cream);color:var(--text);outline:none;transition:border-color .15s;width:100%;}
+input:focus,textarea:focus,select:focus{border-color:var(--rose);background:white;}
+textarea{resize:vertical;min-height:80px;}
+.form-full{grid-column:1/-1;}
+
+/* MIC BUTTON */
+.mic-btn{display:flex;align-items:center;gap:5px;background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;cursor:pointer;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--text-muted);transition:all .18s;white-space:nowrap;}
+.mic-btn:hover{background:var(--blush);border-color:var(--rose-light);}
+.mic-btn.recording{background:var(--rose-light);border-color:var(--rose);color:var(--rose-dark);}
+.mic-badge{display:none;align-items:center;gap:6px;background:var(--rose);color:white;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;pointer-events:none;margin-top:4px;}
+.mic-badge.show{display:flex;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+.mic-dot{width:6px;height:6px;border-radius:50%;background:white;display:inline-block;animation:pulse .85s ease-in-out infinite;}
+
+/* CHECKLIST */
+.checklist-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.checklist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.format-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
+.badge-carrossel{background:var(--purple-light);color:var(--purple);}
+.badge-reel{background:var(--rose-light);color:var(--rose-dark);}
+.badge-estatico{background:var(--sage-light);color:var(--sage);}
+.badge-story{background:var(--amber-light);color:var(--amber);}
+.progress-bar-wrap{height:4px;background:var(--border);border-radius:2px;margin-bottom:14px;}
+.progress-bar-fill{height:4px;border-radius:2px;background:var(--rose);transition:width .3s;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.check-item:last-child{border-bottom:none;}
+.check-item input[type="checkbox"]{width:15px;height:15px;margin-top:2px;accent-color:var(--rose);cursor:pointer;flex-shrink:0;padding:0;}
+.check-label{font-size:13px;line-height:1.5;}
+.check-label.done{text-decoration:line-through;color:var(--text-light);}
+.check-sub{font-size:11px;color:var(--text-light);margin-top:1px;}
+
+/* KANBAN */
+.kanban-wrapper{overflow-x:auto;padding-bottom:8px;}
+.kanban-board{display:grid;grid-template-columns:repeat(6,minmax(180px,1fr));gap:10px;min-height:420px;}
+.kanban-col{border-radius:var(--radius);padding:11px;min-height:380px;transition:background .2s,border .2s;}
+.kanban-col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.col-title{font-size:10px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;}
+.col-count{background:rgba(255,255,255,.85);color:var(--text-muted);font-size:10px;font-weight:500;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.kanban-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px;margin-bottom:7px;transition:box-shadow .18s,opacity .2s;}
+.kanban-card:hover{box-shadow:var(--shadow);}
+.kanban-card.dragging{opacity:.35;transform:scale(.96);}
+.kanban-card-title{font-size:12px;font-weight:500;margin-bottom:5px;line-height:1.4;cursor:pointer;}
+.kanban-card-title:hover{color:var(--rose-dark);}
+.kanban-card-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.kanban-card-date{font-size:10px;color:var(--text-light);}
+.card-actions{display:flex;gap:4px;margin-top:6px;border-top:1px solid var(--border);padding-top:6px;}
+.card-btn{flex:1;background:none;border:1px solid var(--border);border-radius:4px;font-size:10px;padding:3px 0;cursor:pointer;color:var(--text-muted);transition:all .15s;font-family:'DM Sans',sans-serif;}
+.card-btn:hover{background:var(--blush);color:var(--rose-dark);border-color:var(--rose-light);}
+.kanban-col.drag-over{border:2px dashed var(--rose)!important;background:var(--rose-light)!important;}
+.priority-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.priority-high{background:#E24B4A;}
+.priority-med{background:var(--amber);}
+.priority-low{background:var(--green);}
+
+/* CALENDAR */
+.month-nav{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.month-nav .btn{flex-shrink:0;}
+.month-name{font-family:'Playfair Display',serif;font-size:18px;flex:1;text-align:center;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.cal-day-header{text-align:center;font-size:10px;font-weight:500;color:var(--text-light);text-transform:uppercase;padding:5px 0;letter-spacing:.05em;}
+.cal-day{min-height:82px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 7px;cursor:default;transition:border-color .15s;}
+.cal-day.other-month{background:var(--cream);opacity:.5;}
+.cal-day.today-cell{border-color:var(--rose);border-width:2px;}
+.cal-day-num{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:4px;}
+.cal-day.today-cell .cal-day-num{color:var(--rose-dark);}
+/* Force detail date row to stack on mobile */
+.detail-date-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px;}
+/* Archive checklist column — never clip */
+.archive-cl-cell{white-space:nowrap;min-width:90px;}
+
+/* ARCHIVE */
+.filter-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.filter-chip{padding:4px 12px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:var(--white);color:var(--text-muted);cursor:pointer;transition:all .15s;}
+.filter-chip:hover,.filter-chip.active{background:var(--rose-light);color:var(--rose-dark);border-color:var(--rose-light);}
+.archive-table{width:100%;border-collapse:collapse;font-size:13px;}
+.archive-table th{text-align:left;font-size:10px;font-weight:500;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;border-bottom:1px solid var(--border);}
+.archive-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.archive-table tr:last-child td{border-bottom:none;}
+.archive-table tbody tr:hover td{background:var(--blush);cursor:pointer;}
+
+/* METRICS */
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.metric-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
+.metric-title{font-size:10px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:13px;}
+.bar-row{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.bar-label{font-size:11px;color:var(--text-muted);min-width:86px;}
+.bar-track{flex:1;height:5px;background:var(--blush);border-radius:3px;}
+.bar-fill{height:5px;border-radius:3px;transition:width .4s;}
+.bar-val{font-size:11px;font-weight:500;min-width:20px;text-align:right;}
+.tips-list{list-style:none;}
+.tips-list li{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.5;}
+.tips-list li:last-child{border-bottom:none;}
+.tip-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,36,32,.38);display:none;align-items:center;justify-content:center;z-index:200;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:var(--radius);padding:24px;width:580px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(44,36,32,.22);}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:17px;line-height:1.3;}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-light);line-height:1;flex-shrink:0;}
+.modal-close:hover{color:var(--text);}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.stage-pill{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--white);color:var(--text-muted);}
+.stage-pill:hover{border-color:var(--rose);color:var(--rose);}
+.stage-pill.active{background:var(--rose);color:white;border-color:var(--rose);}
+.stage-pill.past{background:var(--rose-light);color:var(--rose-dark);border-color:var(--rose-light);}
+.checklist-scroll{max-height:320px;overflow-y:auto;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:white;padding:11px 16px;border-radius:var(--radius-sm);font-size:13px;z-index:300;opacity:0;transform:translateY(8px);transition:all .28s;pointer-events:none;max-width:280px;}
+.toast.show{opacity:1;transform:translateY(0);}
+.empty-state{text-align:center;padding:36px 20px;color:var(--text-muted);}
+.empty-state .emoji{font-size:28px;margin-bottom:8px;}
+.empty-state p{font-size:13px;line-height:1.6;}
+
+/* SAVE INDICATOR */
+.save-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:5px;vertical-align:middle;transition:background .3s;}
+.save-dot.saving{background:var(--amber);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:rgba(44,36,32,.15);border-radius:3px;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:100;transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .mobile-header{display:flex;}
+  .topbar{display:none;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .input-row{grid-template-columns:1fr;}
+  .metrics-grid{grid-template-columns:1fr;}
+  .content{padding:16px;}
+  .modal{padding:18px;}
+  .modal-grid{grid-template-columns:1fr;}
+  .detail-date-row{grid-template-columns:1fr !important;}
+  .kanban-board{grid-template-columns:repeat(6,minmax(160px,1fr));}
+  .archive-table th:nth-child(3),.archive-table td:nth-child(3){display:none;}
+  .month-name{font-size:15px;}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .topbar-actions .btn-outline{display:none;}
+  .month-name{font-size:14px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <h1>Femme Vita</h1>
+      <p>Central de Marketing</p>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active" onclick="navigate('dashboard')"><span class="nav-icon">◈</span>Dashboard</div>
+      <div class="nav-item" onclick="navigate('brainstorm')"><span class="nav-icon">✦</span>Brainstorm</div>
+      <div class="nav-item" onclick="navigate('agenda')"><span class="nav-icon">◻</span>Agenda</div>
+      <div class="nav-item" onclick="navigate('checklists')"><span class="nav-icon">✓</span>Checklists</div>
+      <div class="nav-item" onclick="navigate('kanban')"><span class="nav-icon">⬡</span>Funil Kanban</div>
+      <div class="nav-item" onclick="navigate('arquivo')"><span class="nav-icon">◬</span>Arquivo</div>
+      <div class="nav-item" onclick="navigate('metricas')"><span class="nav-icon">◇</span>Métricas</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="dr-badge">
+        <div class="dr-avatar">PG</div>
+        <div class="dr-info"><p>Dra. Priscila Guyt</p><span>Ginecologia · Histeroscopia</span></div>
+      </div>
+    </div>
+  </aside>
+  <div class="mobile-overlay" id="mob-overlay" onclick="closeSidebar()"></div>
+
+  <main class="main">
+    <!-- MOBILE HEADER -->
+    <div class="mobile-header">
+      <button class="hamburger" onclick="openSidebar()">☰</button>
+      <span class="mobile-title">Femme Vita</span>
+      <button class="btn btn-primary btn-sm" onclick="openNewIdeaModal()">+ Ideia</button>
+    </div>
+
+    <!-- DESKTOP TOPBAR -->
+    <div class="topbar">
+      <span class="topbar-title" id="page-title">Dashboard</span>
+      <div class="topbar-actions">
+        <span id="save-indicator" style="font-size:11px;color:var(--text-light);display:flex;align-items:center;"><span class="save-dot" id="save-dot"></span><span id="save-text">Salvo</span></span>
+        <button class="btn btn-outline btn-sm" onclick="openNewPostModal()">+ Novo Post</button>
+        <button class="btn btn-primary btn-sm" onclick="openNewIdeaModal()">+ Ideia</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="view active" id="view-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Posts no funil</div><div class="stat-value" id="stat-posts">0</div><div class="stat-sub"><span class="stat-dot" style="background:var(--green)"></span>em andamento</div></div>
+          <div class="stat-card"><div class="stat-label">Banco de ideias</div><div class="stat-value" id="stat-ideas">0</div><div class="stat-sub"><span class="stat-dot" style="background:var(--rose)"></span>brainstorm</div></div>
+          <div class="stat-card"><div class="stat-label">Em produção</div><div class="stat-value" id="stat-prod">0</div><div class="stat-sub"><span class="stat-dot" style="background:var(--amber)"></span>roteiro + criação</div></div>
+          <div class="stat-card"><div class="stat-label">Publicados</div><div class="stat-value" id="stat-pub">0</div><div class="stat-sub"><span class="stat-dot" style="background:var(--blue)"></span>no arquivo</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+          <div>
+            <div class="section-header"><span class="section-title">Próximos posts</span><button class="btn btn-ghost btn-sm" onclick="navigate('agenda')">Ver agenda →</button></div>
+            <div id="upcoming-posts"></div>
+          </div>
+          <div>
+            <div class="section-header"><span class="section-title">Boas práticas</span></div>
+            <ul class="tips-list">
+              <li><span class="tip-icon">◈</span>Poste nos horários de pico: 8h–9h, 12h–13h e 19h–20h</li>
+              <li><span class="tip-icon">◈</span>Carrosséis educativos geram 3× mais salvamentos</li>
+              <li><span class="tip-icon">◈</span>Reels com depoimentos de pacientes aumentam conversão</li>
+              <li><span class="tip-icon">◈</span>Stories com enquete aumentam o alcance orgânico</li>
+              <li><span class="tip-icon">◈</span>Hashtags: #histeroscopia #ginecologia #saúdefeminina</li>
+              <li><span class="tip-icon">◈</span>Sempre inclua CTA: "Agende via link na bio"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- BRAINSTORM -->
+      <div class="view" id="view-brainstorm">
+        <div class="brainstorm-input-area">
+          <h3>✦ Nova ideia da Dra. Priscila</h3>
+          <div class="input-row">
+            <div class="form-group">
+              <label class="form-label">Título da ideia</label>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <input type="text" id="idea-title-input" placeholder="Ex: Mitos sobre histeroscopia" style="flex:1">
+                <button class="mic-btn" id="mic-title-btn" onclick="toggleMic('title')" title="Ditar título">🎙 <span id="mic-title-label">Ditar</span></button>
+              </div>
+            </div>
+            <div class="form-group"><label class="form-label">Tema</label><select id="idea-tag-input"><option value="histeroscopia">Histeroscopia</option><option value="fertilidade">Fertilidade</option><option value="educativo">Educativo</option><option value="promo">Promocional</option><option value="depoimento">Depoimento</option><option value="rotina">Rotina Médica</option></select></div>
+          </div>
+          <div class="input-row">
+            <div class="form-group form-full">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                <label class="form-label" style="margin:0">Descrição / Conteúdo</label>
+                <button class="mic-btn" id="mic-desc-btn" onclick="toggleMic('desc')" title="Ditar descrição">🎙 <span id="mic-desc-label">Ditar</span></button>
+              </div>
+              <textarea id="idea-desc-input" placeholder="Descreva o ângulo, mensagem principal, referências... ou clique em Ditar para falar."></textarea>
+              <div class="mic-badge" id="mic-badge"><span class="mic-dot"></span><span id="mic-interim-text">ouvindo…</span></div>
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="form-group"><label class="form-label">Formato sugerido</label><select id="idea-format-input"><option value="Carrossel">Carrossel</option><option value="Reel">Reel</option><option value="Estático">Estático</option><option value="Story">Story</option><option value="A definir">A definir</option></select></div>
+            <div class="form-group" style="justify-content:flex-end;align-items:flex-end;"><button class="btn btn-primary" onclick="addIdea()">Salvar ideia</button></div>
+          </div>
+        </div>
+        <div class="section-header">
+          <span class="section-title">Banco de ideias</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm idea-filter active-filter" id="filter-all" onclick="filterIdeas('all')">Todas</button>
+            <button class="btn btn-ghost btn-sm idea-filter" id="filter-histeroscopia" onclick="filterIdeas('histeroscopia')">Histeroscopia</button>
+            <button class="btn btn-ghost btn-sm idea-filter" id="filter-fertilidade" onclick="filterIdeas('fertilidade')">Fertilidade</button>
+            <button class="btn btn-ghost btn-sm idea-filter" id="filter-educativo" onclick="filterIdeas('educativo')">Educativo</button>
+          </div>
+        </div>
+        <div class="brainstorm-grid" id="ideas-grid"></div>
+      </div>
+
+      <!-- AGENDA -->
+      <div class="view" id="view-agenda">
+        <div class="month-nav">
+          <button class="btn btn-ghost btn-sm" onclick="changeMonth(-1)">← Anterior</button>
+          <span class="month-name" id="month-display"></span>
+          <button class="btn btn-ghost btn-sm" onclick="changeMonth(1)">Próximo →</button>
+        </div>
+        <div class="cal-grid" id="cal-headers"></div>
+        <div class="cal-grid" style="margin-top:5px" id="cal-body"></div>
+      </div>
+
+      <!-- CHECKLISTS -->
+      <div class="view" id="view-checklists">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;" id="checklists-container"></div>
+      </div>
+
+      <!-- KANBAN -->
+      <div class="view" id="view-kanban">
+        <div class="section-header">
+          <span class="section-title">Funil de Produção</span>
+          <span style="font-size:11px;color:var(--text-light)">Clique no título · Use ← → · Arraste entre colunas</span>
+        </div>
+        <div class="kanban-wrapper"><div class="kanban-board" id="kanban-board"></div></div>
+      </div>
+
+      <!-- ARQUIVO -->
+      <div class="view" id="view-arquivo">
+        <div class="section-header">
+          <span class="section-title">Publicados & Arquivados</span>
+          <span id="archive-count" style="font-size:12px;color:var(--text-muted)"></span>
+        </div>
+        <div class="filter-row" id="archive-filters"></div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;overflow-x:auto;">
+          <table class="archive-table"><thead><tr><th>Título</th><th>Formato</th><th>Tema</th><th>Data</th><th>Checklist</th></tr></thead>
+          <tbody id="archive-body"></tbody></table>
+          <div id="archive-empty"></div>
+        </div>
+      </div>
+
+      <!-- MÉTRICAS -->
+      <div class="view" id="view-metricas">
+        <div class="metrics-grid">
+          <div class="metric-card"><div class="metric-title">Posts por formato</div><div id="metric-formats"></div></div>
+          <div class="metric-card"><div class="metric-title">Temas mais abordados</div><div id="metric-temas"></div></div>
+          <div class="metric-card"><div class="metric-title">Status do pipeline</div><div id="metric-status"></div></div>
+          <div class="metric-card"><div class="metric-title">Dicas estratégicas</div>
+            <ul class="tips-list" style="margin-top:2px">
+              <li><span class="tip-icon">✦</span>Carrosséis educativos têm alto potencial de salvamento e compartilhamento</li>
+              <li><span class="tip-icon">✦</span>Reels de bastidores criam proximidade e reduzem a barreira de agendamento</li>
+              <li><span class="tip-icon">✦</span>Depoimentos reais são o conteúdo com maior taxa de conversão</li>
+              <li><span class="tip-icon">✦</span>Frequência ideal: 4–5 posts/semana + stories diários</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .content -->
+  </main>
+</div>
+
+<!-- MODAL: NOVO POST -->
+<div class="modal-overlay" id="modal-post">
+  <div class="modal">
+    <div class="modal-header"><h2 class="modal-title">Novo Post</h2><button class="modal-close" onclick="closeModal('modal-post')">×</button></div>
+    <div class="modal-grid">
+      <div class="form-group form-full"><label class="form-label">Título</label><input type="text" id="post-title" placeholder="Ex: 5 mitos sobre histeroscopia"></div>
+      <div class="form-group"><label class="form-label">Formato</label><select id="post-format"><option value="carrossel">Carrossel</option><option value="reel">Reel</option><option value="estatico">Estático</option><option value="story">Story</option></select></div>
+      <div class="form-group"><label class="form-label">Tema</label><select id="post-tema"><option value="histeroscopia">Histeroscopia</option><option value="fertilidade">Fertilidade</option><option value="educativo">Educativo</option><option value="depoimento">Depoimento</option><option value="promo">Promocional</option><option value="rotina">Rotina Médica</option></select></div>
+      <div class="form-group"><label class="form-label">Data de publicação</label><input type="date" id="post-date"></div>
+      <div class="form-group"><label class="form-label">Prioridade</label><select id="post-priority"><option value="high">Alta</option><option value="med">Média</option><option value="low">Baixa</option></select></div>
+      <div class="form-group form-full"><label class="form-label">Observações</label><textarea id="post-obs" placeholder="Referências, tom de voz, detalhes..."></textarea></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+      <button class="btn btn-ghost" onclick="closeModal('modal-post')">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePost()">Adicionar ao funil</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: IDEIA RÁPIDA -->
+<div class="modal-overlay" id="modal-idea">
+  <div class="modal">
+    <div class="modal-header"><h2 class="modal-title">Nova Ideia Rápida</h2><button class="modal-close" onclick="closeModal('modal-idea')">×</button></div>
+    <div class="form-group">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <label class="form-label" style="margin:0">Ideia</label>
+        <button class="mic-btn" id="mic-quick-btn" onclick="toggleMic('quick')" title="Ditar ideia">🎙 <span id="mic-quick-label">Ditar</span></button>
+      </div>
+      <textarea id="quick-idea" placeholder="Descreva rapidamente... ou clique em Ditar para falar."></textarea>
+      <div class="mic-badge" id="mic-badge-quick"><span class="mic-dot"></span><span id="mic-interim-quick">ouvindo…</span></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+      <button class="btn btn-ghost" onclick="closeModal('modal-idea')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveQuickIdea()">Salvar no brainstorm</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DETALHES DO POST -->
+<div class="modal-overlay" id="modal-detail">
+  <div class="modal">
+    <div class="modal-header">
+      <div style="flex:1;min-width:0;">
+        <h2 class="modal-title" id="detail-title" style="overflow-wrap:break-word;"></h2>
+        <div style="display:flex;gap:7px;margin-top:7px;flex-wrap:wrap;" id="detail-badges"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px;" class="detail-date-row">
+      <div class="form-group"><label class="form-label">Data de publicação</label><input type="date" id="detail-date"></div>
+      <div class="form-group"><label class="form-label">Observações</label><input type="text" id="detail-obs" placeholder="Notas adicionais..."></div>
+    </div>
+    <div style="background:var(--blush);border-radius:var(--radius-sm);padding:13px;margin-bottom:16px;">
+      <div style="font-size:10px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;">Etapa do funil — clique para mover</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;" id="detail-stage-nav"></div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;">Checklist de produção</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">
+        <div style="flex:1;height:4px;background:var(--border);border-radius:2px"><div style="height:4px;border-radius:2px;background:var(--rose);transition:width .3s" id="detail-cl-bar"></div></div>
+        <span style="font-size:11px;color:var(--text-muted)" id="detail-cl-count"></span>
+      </div>
+      <div class="checklist-scroll" id="detail-checklist"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:space-between;margin-top:18px;flex-wrap:wrap;">
+      <button class="btn btn-danger btn-sm" onclick="deleteCurrentPost()">Excluir post</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>
+        <button class="btn btn-primary" onclick="saveDetail()">Salvar alterações</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen" style="position:fixed;inset:0;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;">
+  <div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--rose-dark);">Femme Vita</div>
+  <div style="font-size:12px;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;">Conectando ao banco de dados…</div>
+  <div style="display:flex;gap:6px;margin-top:4px;">
+    <span style="width:7px;height:7px;border-radius:50%;background:var(--rose);animation:pulse .9s ease-in-out infinite"></span>
+    <span style="width:7px;height:7px;border-radius:50%;background:var(--rose);animation:pulse .9s ease-in-out .3s infinite"></span>
+    <span style="width:7px;height:7px;border-radius:50%;background:var(--rose);animation:pulse .9s ease-in-out .6s infinite"></span>
+  </div>
+</div>
+
+<script type="module">
+// ═══════════════════════════════════════════════════════
+//  FIREBASE CONFIG — cole suas credenciais aqui
+// ═══════════════════════════════════════════════════════
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getFirestore, doc, collection, getDocs, setDoc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAaZUr1nOWFV2xf0_6Kv21IyYjGR3lImiA",
+  authDomain:        "femme-vita-marketing.firebaseapp.com",
+  projectId:         "femme-vita-marketing",
+  storageBucket:     "femme-vita-marketing.firebasestorage.app",
+  messagingSenderId: "1038013204964",
+  appId:             "1:1038013204964:web:277cf91fd8073d6d8d9ff1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ═══════════════════════════════════════════════════════
+//  CONSTANTS
+// ═══════════════════════════════════════════════════════
+const TODAY = new Date();
+const STATUS_ORDER  = ['ideia','roteiro','producao','revisao','aprovacao','agendado','publicado'];
+const STATUS_LABELS = {ideia:'Ideia',roteiro:'Roteiro',producao:'Produção',revisao:'Revisão',aprovacao:'Aprovação',agendado:'Agendado',publicado:'Publicado'};
+const COL_COLORS    = {ideia:'#FDF0E0',roteiro:'#E0EDF5',producao:'#EDE5F5',revisao:'#F2E0E5',aprovacao:'#E0EDE8',agendado:'#E0EDE5'};
+const FMT_CLASS     = {carrossel:'pill-carrossel',reel:'pill-reel',estatico:'pill-estatico',story:'pill-story'};
+const TAG_CLASS     = {histeroscopia:'tag-histeroscopia',fertilidade:'tag-fertilidade',educativo:'tag-educativo',depoimento:'tag-depoimento',promo:'tag-promo',rotina:'tag-rotina'};
+const FMT_COLORS    = {carrossel:'var(--purple)',reel:'var(--rose)',estatico:'var(--sage)',story:'var(--amber)'};
+const TAG_COLORS    = {histeroscopia:'var(--purple)',fertilidade:'var(--green)',educativo:'var(--blue)',depoimento:'var(--rose)',promo:'var(--amber)',rotina:'var(--sage)'};
+
+const CL = {
+  carrossel:{label:'Carrossel',badge:'badge-carrossel',items:[
+    {t:'Definir tema e ângulo do conteúdo',s:'Qual problema resolve para a paciente?'},
+    {t:'Roteiro de slides (mín. 5, máx. 10)',s:'Capa + desenvolvimento + CTA'},
+    {t:'Revisar linguagem com a Dra. Priscila',s:'Tom: acolhedor, claro, sem jargão excessivo'},
+    {t:'Design dos slides (identidade Femme Vita)',s:'Paleta, tipografia, foto da Dra. se necessário'},
+    {t:'Escrever legenda com CTA',s:'Link na bio + WhatsApp da Gabriella'},
+    {t:'Hashtags selecionadas',s:'#histeroscopia #ginecologia #saúdefeminina'},
+    {t:'Aprovação da Dra. Priscila',s:'Verificar informações clínicas'},
+    {t:'Agendar no horário de pico',s:'8h–9h ou 19h–20h'},
+    {t:'Monitorar engajamento nas primeiras 2h',s:'Responder comentários e DMs'},
+  ]},
+  reel:{label:'Reel',badge:'badge-reel',items:[
+    {t:'Definir gancho (primeiros 3 segundos)',s:'Pergunta, afirmação impactante ou visual forte'},
+    {t:'Roteiro com duração máxima de 60s',s:''},
+    {t:'Gravar com boa iluminação e áudio',s:'Microfone lapela se possível'},
+    {t:'Edição: cortes, legendas e música',s:'Legenda melhora acessibilidade e engajamento'},
+    {t:'Branding sutil (logo/cor Femme Vita)',s:''},
+    {t:'Revisar informações clínicas com a Dra.',s:''},
+    {t:'Legenda curta + CTA direto',s:'"Quer saber mais? Fale com a Gabriella"'},
+    {t:'Thumbnail atrativa',s:''},
+    {t:'Publicar e impulsionar se necessário',s:''},
+  ]},
+  estatico:{label:'Post Estático',badge:'badge-estatico',items:[
+    {t:'Definir mensagem principal',s:'Uma ideia por post'},
+    {t:'Design impactante com hierarquia visual',s:''},
+    {t:'Foto de qualidade',s:'Da Dra., consultório ou banco de imagens'},
+    {t:'Revisão ortográfica no design',s:''},
+    {t:'Legenda elaborada com contexto',s:''},
+    {t:'Aprovação da Dra. Priscila',s:''},
+    {t:'CTA claro na legenda ou no design',s:''},
+    {t:'Publicar no horário de pico',s:''},
+  ]},
+  story:{label:'Story',badge:'badge-story',items:[
+    {t:'Definir objetivo: informar, engajar ou converter',s:''},
+    {t:'Sequência de 3–5 stories no tema',s:''},
+    {t:'Usar recursos interativos (enquete, quiz)',s:'Aumenta o alcance orgânico'},
+    {t:'Incluir link do WhatsApp via sticker',s:''},
+    {t:'Identidade visual consistente',s:''},
+    {t:'Salvar como destaque se for evergreen',s:"Ex: 'Histeroscopia', 'Fertilidade'"},
+    {t:'Publicar no horário ativo da audiência',s:'20h–22h costuma ter bom alcance'},
+  ]},
+};
+
+// ═══════════════════════════════════════════════════════
+//  STATE (mantido em memória — sincronizado com Firestore)
+// ═══════════════════════════════════════════════════════
+let ideas          = [];
+let posts          = [];
+let clState        = {};
+let standaloneState= {};
+let currentMonth   = TODAY.getMonth();
+let currentYear    = TODAY.getFullYear();
+let currentDetailId= null;
+let archiveFilterFormat = 'all';
+let ideaFilter     = 'all';
+let saveTimer      = null;
+let dbReady        = false;
+
+// ─── Indicador de status ───────────────────────────────
+function setSaveStatus(state) {
+  const dot = document.getElementById('save-dot');
+  const txt = document.getElementById('save-text');
+  if (!dot) return;
+  if (state === 'saving') { dot.classList.add('saving'); if(txt) txt.textContent = 'Salvando…'; }
+  else if (state === 'saved') { dot.classList.remove('saving'); if(txt) txt.textContent = 'Salvo'; }
+  else if (state === 'offline') { dot.style.background='#E24B4A'; if(txt) txt.textContent = 'Offline'; }
+}
+
+// ─── Firestore helpers ─────────────────────────────────
+async function fbSet(colName, id, data) {
+  try {
+    setSaveStatus('saving');
+    await setDoc(doc(db, colName, String(id)), data);
+    setSaveStatus('saved');
+  } catch(e) { console.error(e); setSaveStatus('offline'); }
+}
+
+async function fbDelete(colName, id) {
+  try { await deleteDoc(doc(db, colName, String(id))); setSaveStatus('saved'); }
+  catch(e) { console.error(e); }
+}
+
+// ─── persist() substitui localStorage ─────────────────
+// Chamada após cada mutação — salva o documento alterado no Firestore
+// Em vez de serializar tudo, salvamos doc a doc para ser eficiente
+
+function persist() { /* No-op: saves happen inline per operation */ }
+
+async function persistIdeas() {
+  setSaveStatus('saving');
+  // Salva a lista inteira como um único documento (simples e eficiente para este volume)
+  await fbSet('app', 'ideas', { list: ideas });
+}
+
+async function persistPosts() {
+  setSaveStatus('saving');
+  await fbSet('app', 'posts', { list: posts });
+}
+
+async function persistClState() {
+  await fbSet('app', 'clstate', clState);
+}
+
+async function persistScState() {
+  await fbSet('app', 'scstate', standaloneState);
+}
+
+// ─── Carregamento inicial + listener em tempo real ────
+async function initFirebase() {
+  setSaveStatus('saving');
+  try {
+    // Listener em tempo real — atualiza o app quando outro dispositivo salva
+    onSnapshot(doc(db, 'app', 'ideas'), snap => {
+      if (snap.exists()) {
+        ideas = snap.data().list || [];
+        if (dbReady) { renderIdeas(); updateStats(); }
+      }
+    });
+    onSnapshot(doc(db, 'app', 'posts'), snap => {
+      if (snap.exists()) {
+        posts = snap.data().list || [];
+        if (dbReady) { renderDashboard(); renderKanban(); renderCalendar(); renderArchive(); }
+      }
+    });
+    onSnapshot(doc(db, 'app', 'clstate'), snap => {
+      if (snap.exists()) { clState = snap.data() || {}; }
+    });
+    onSnapshot(doc(db, 'app', 'scstate'), snap => {
+      if (snap.exists()) { standaloneState = snap.data() || {}; }
+    });
+
+    // Aguarda primeiro carregamento
+    await new Promise(r => setTimeout(r, 1200));
+
+    // Se banco vazio, sobe dados padrão
+    if (!ideas.length) {
+      ideas = DEFAULT_IDEAS;
+      await persistIdeas();
+    }
+    if (!posts.length) {
+      posts = DEFAULT_POSTS;
+      await persistPosts();
+    }
+
+    dbReady = true;
+    setSaveStatus('saved');
+    renderDashboard();
+    document.getElementById('loading-screen')?.remove();
+  } catch(e) {
+    console.error('Firebase error:', e);
+    setSaveStatus('offline');
+    // Fallback para localStorage se Firebase falhar
+    ideas = JSON.parse(localStorage.getItem('fv_ideas') || 'null') || DEFAULT_IDEAS;
+    posts = JSON.parse(localStorage.getItem('fv_posts') || 'null') || DEFAULT_POSTS;
+    clState = JSON.parse(localStorage.getItem('fv_clstate') || '{}');
+    standaloneState = JSON.parse(localStorage.getItem('fv_scstate') || '{}');
+    dbReady = true;
+    renderDashboard();
+    document.getElementById('loading-screen')?.remove();
+    showToast('Modo offline — dados locais');
+  }
+}
+
+const DEFAULT_IDEAS = [
+  {id:1,title:'Mitos e verdades sobre histeroscopia',tag:'histeroscopia',desc:'Carrossel desmistificando medos comuns: dói muito? precisa de internação? quanto tempo leva?',format:'Carrossel',pinned:true},
+  {id:2,title:'A jornada da paciente tentando engravidar',desc:'Reel emocional: consulta → exames → histeroscopia → resultado positivo',tag:'fertilidade',format:'Reel',pinned:false},
+  {id:3,title:'O que é videohisteroscopia?',desc:'Post educativo explicando o procedimento de forma acessível',tag:'educativo',format:'Estático',pinned:false},
+  {id:4,title:'Depoimento: pólipo removido, vida nova',desc:'Relato de paciente que resolveu pólipo e melhorou qualidade de vida',tag:'depoimento',format:'Reel',pinned:true},
+  {id:5,title:'DIU: quando e como é inserido',desc:'Carrossel completo sobre inserção de DIU — tipos, processo, recuperação',tag:'educativo',format:'Carrossel',pinned:false},
+  {id:6,title:'Bastidores do Rio Day Hospital',desc:'Stories mostrando a estrutura para procedimentos cirúrgicos',tag:'rotina',format:'Story',pinned:false},
+  {id:7,title:'Reprodução assistida: o que oferecemos',desc:'Técnicas de reprodução assistida com a Dra. Priscila',tag:'fertilidade',format:'Carrossel',pinned:false},
+];
+const DEFAULT_POSTS = [
+  {id:1,title:'Mitos histeroscopia',format:'carrossel',tema:'histeroscopia',date:'2026-04-01',priority:'high',status:'ideia',obs:''},
+  {id:2,title:'Depoimento fertilidade',format:'reel',tema:'fertilidade',date:'2026-04-03',priority:'high',status:'producao',obs:''},
+  {id:3,title:'O que é videohisteroscopia',format:'estatico',tema:'educativo',date:'2026-04-05',priority:'med',status:'roteiro',obs:''},
+  {id:4,title:'DIU — tipos e processo',format:'carrossel',tema:'educativo',date:'2026-04-08',priority:'med',status:'revisao',obs:''},
+  {id:5,title:'Bastidores Rio Day Hospital',format:'story',tema:'rotina',date:'2026-04-10',priority:'low',status:'aprovacao',obs:''},
+  {id:6,title:'Reprodução assistida',format:'carrossel',tema:'fertilidade',date:'2026-04-12',priority:'high',status:'agendado',obs:''},
+  {id:7,title:'Cuidados pós histeroscopia',format:'estatico',tema:'histeroscopia',date:'2026-03-20',priority:'med',status:'publicado',obs:'Bom engajamento'},
+];
+
+// ═══════════════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════════════
+function fmt(d) {
+  if (!d) return '';
+  if (d.includes('/')) return d;
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+function toIso(d,m,y) { return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2600);
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openNewPostModal() { document.getElementById('modal-post').classList.add('open'); }
+function openNewIdeaModal() { document.getElementById('modal-idea').classList.add('open'); }
+function getCl(format) { return CL[format] || CL['estatico']; }
+function clPct(postId, format) {
+  const cl = getCl(format);
+  const s = clState[String(postId)] || {};
+  const done = Object.values(s).filter(Boolean).length;
+  return {done, total:cl.items.length, pct:Math.round(done/cl.items.length*100)};
+}
+
+// ═══════════════════════════════════════════════════════
+//  MOBILE SIDEBAR
+// ═══════════════════════════════════════════════════════
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('mob-overlay').classList.add('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════════
+//  NAVIGATE
+// ═══════════════════════════════════════════════════════
+function navigate(view) {
+  closeSidebar();
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  const keys = ['dashboard','brainstorm','agenda','checklists','kanban','arquivo','metricas'];
+  document.querySelectorAll('.nav-item')[keys.indexOf(view)]?.classList.add('active');
+  const titles = {dashboard:'Dashboard',brainstorm:'Brainstorm',agenda:'Agenda de Publicações',checklists:'Checklists de Produção',kanban:'Funil Kanban',arquivo:'Arquivo de Posts',metricas:'Métricas'};
+  document.getElementById('page-title').textContent = titles[view];
+  if (view==='brainstorm') renderIdeas();
+  if (view==='agenda') renderCalendar();
+  if (view==='checklists') renderChecklists();
+  if (view==='kanban') renderKanban();
+  if (view==='dashboard') renderDashboard();
+  if (view==='arquivo') renderArchive();
+  if (view==='metricas') renderMetrics();
+}
+
+// ═══════════════════════════════════════════════════════
+//  DETAIL MODAL
+// ═══════════════════════════════════════════════════════
+function openDetail(postId) {
+  const p = posts.find(x => x.id === postId);
+  if (!p) return;
+  currentDetailId = postId;
+  document.getElementById('detail-title').textContent = p.title;
+  document.getElementById('detail-date').value = p.date || '';
+  document.getElementById('detail-obs').value = p.obs || '';
+  const prioText = {high:'Alta',med:'Média',low:'Baixa'};
+  document.getElementById('detail-badges').innerHTML = `
+    <span class="post-pill ${FMT_CLASS[p.format]||''}" style="margin:0;display:inline-block">${p.format}</span>
+    <span class="idea-tag ${TAG_CLASS[p.tema]||''}" style="margin:0">${p.tema}</span>
+    <span style="font-size:10px;color:var(--text-muted)">Prioridade ${prioText[p.priority]||p.priority}</span>
+  `;
+  renderDetailStageNav(postId, p.status);
+  renderDetailChecklist(postId, p.format);
+  document.getElementById('modal-detail').classList.add('open');
+}
+
+function renderDetailStageNav(postId, currentStatus) {
+  const curIdx = STATUS_ORDER.indexOf(currentStatus);
+  document.getElementById('detail-stage-nav').innerHTML = STATUS_ORDER.map((s,i) => {
+    let cls = 'stage-pill';
+    if (i===curIdx) cls += ' active';
+    else if (i<curIdx) cls += ' past';
+    return `<span class="${cls}" onclick="setStage(${postId},'${s}')">${STATUS_LABELS[s]}</span>`;
+  }).join('');
+}
+
+function renderDetailChecklist(postId, format) {
+  const key = String(postId);
+  if (!clState[key]) clState[key] = {};
+  const cl = getCl(format);
+  const {done, total, pct} = clPct(postId, format);
+  document.getElementById('detail-cl-bar').style.width = pct+'%';
+  document.getElementById('detail-cl-count').textContent = `${done}/${total}`;
+  document.getElementById('detail-checklist').innerHTML = cl.items.map((item,idx) => `
+    <div class="check-item">
+      <input type="checkbox" id="dcl-${idx}" ${clState[key][idx]?'checked':''} onchange="toggleDcl(${postId},${idx},${total})">
+      <div>
+        <div class="check-label ${clState[key][idx]?'done':''}" id="dcl-lbl-${idx}">${item.t}</div>
+        ${item.s?`<div class="check-sub">${item.s}</div>`:''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleDcl(postId, idx, total) {
+  const key = String(postId);
+  if (!clState[key]) clState[key] = {};
+  clState[key][idx] = document.getElementById(`dcl-${idx}`)?.checked;
+  document.getElementById(`dcl-lbl-${idx}`)?.classList.toggle('done', !!clState[key][idx]);
+  const post = posts.find(p => p.id===postId);
+  const {done, pct} = clPct(postId, post?.format||'estatico');
+  document.getElementById('detail-cl-bar').style.width = pct+'%';
+  document.getElementById('detail-cl-count').textContent = `${done}/${total}`;
+  persistClState();
+}
+
+function setStage(postId, newStatus) {
+  const p = posts.find(x => x.id===postId);
+  if (!p) return;
+  p.status = newStatus;
+  renderDetailStageNav(postId, newStatus);
+  renderKanban(); updateStats(); persistPosts();
+  showToast(`Etapa: ${STATUS_LABELS[newStatus]}`);
+}
+
+function saveDetail() {
+  const p = posts.find(x => x.id===currentDetailId);
+  if (!p) return;
+  p.date = document.getElementById('detail-date').value;
+  p.obs = document.getElementById('detail-obs').value;
+  closeModal('modal-detail');
+  renderKanban(); renderCalendar(); persistPosts();
+  showToast('Alterações salvas');
+}
+
+function deleteCurrentPost() {
+  if (!confirm('Excluir este post permanentemente?')) return;
+  posts = posts.filter(p => p.id!==currentDetailId);
+  closeModal('modal-detail');
+  renderKanban(); renderCalendar(); renderArchive(); updateStats(); persistPosts();
+  showToast('Post excluído');
+}
+
+// ═══════════════════════════════════════════════════════
+//  BRAINSTORM
+// ═══════════════════════════════════════════════════════
+function renderIdeas(filter) {
+  if (filter !== undefined) ideaFilter = filter;
+  // Update filter buttons
+  document.querySelectorAll('.idea-filter').forEach(b => {
+    b.classList.remove('active-filter');
+    b.style.borderColor=''; b.style.color='';
+  });
+  const activeBtn = document.getElementById('filter-'+ideaFilter);
+  if (activeBtn) { activeBtn.style.borderColor='var(--rose)'; activeBtn.style.color='var(--rose)'; }
+
+  const list = ideaFilter==='all' ? ideas : ideas.filter(i=>i.tag===ideaFilter);
+  const grid = document.getElementById('ideas-grid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="emoji">✦</div><p>Nenhuma ideia nesta categoria.<br>Adicione a primeira acima!</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map(idea => `
+    <div class="idea-card ${idea.pinned?'pinned':''}">
+      <span class="idea-tag tag-${idea.tag}">${idea.tag}</span>
+      <div class="idea-title">${idea.title}</div>
+      <div class="idea-desc">${idea.desc}</div>
+      <div class="idea-footer">
+        <span class="idea-format">◈ ${idea.format}</span>
+        <div class="idea-actions">
+          <button class="icon-btn" onclick="togglePin(${idea.id})" title="${idea.pinned?'Desafixar':'Fixar'}">${idea.pinned?'★':'☆'}</button>
+          <button class="icon-btn" onclick="promoteIdea(${idea.id})" title="Mover para o Funil (remove do Brainstorm)" style="font-size:15px;font-weight:600">→</button>
+          <button class="icon-btn" onclick="deleteIdea(${idea.id})" title="Excluir">×</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterIdeas(f) { renderIdeas(f); }
+
+function addIdea() {
+  const title = document.getElementById('idea-title-input').value.trim();
+  if (!title) { showToast('Adicione um título para a ideia'); return; }
+  const desc = document.getElementById('idea-desc-input').value.trim();
+  ideas.unshift({id:Date.now(),title,desc:desc||'—',tag:document.getElementById('idea-tag-input').value,format:document.getElementById('idea-format-input').value,pinned:false});
+  document.getElementById('idea-title-input').value='';
+  document.getElementById('idea-desc-input').value='';
+  renderIdeas(); updateStats(); persistIdeas();
+  showToast('Ideia salva ✦');
+}
+
+function togglePin(id) {
+  const i = ideas.find(x=>x.id===id);
+  if (i) { i.pinned=!i.pinned; renderIdeas(); persistIdeas(); }
+}
+
+function deleteIdea(id) {
+  ideas = ideas.filter(x=>x.id!==id);
+  renderIdeas(); updateStats(); persistIdeas();
+  showToast('Ideia removida');
+}
+
+function promoteIdea(id) {
+  const idea = ideas.find(x=>x.id===id);
+  if (!idea) return;
+  const fmtMap = {'Carrossel':'carrossel','Reel':'reel','Estático':'estatico','Story':'story'};
+  posts.push({id:Date.now(),title:idea.title,format:fmtMap[idea.format]||'estatico',tema:idea.tag,date:'',priority:'med',status:'ideia',obs:idea.desc});
+  ideas = ideas.filter(x=>x.id!==id);
+  renderIdeas(); updateStats(); persistIdeas(); persistPosts();
+  showToast('Movida para o Funil ✦');
+}
+
+function saveQuickIdea() {
+  const text = document.getElementById('quick-idea').value.trim();
+  if (!text) return;
+  ideas.unshift({id:Date.now(),title:text,desc:'Ideia rápida — detalhar no brainstorm',tag:'educativo',format:'A definir',pinned:false});
+  document.getElementById('quick-idea').value='';
+  closeModal('modal-idea'); updateStats(); persistIdeas();
+  showToast('Ideia salva ✦');
+}
+
+// ═══════════════════════════════════════════════════════
+//  POSTS / KANBAN
+// ═══════════════════════════════════════════════════════
+function savePost() {
+  const title = document.getElementById('post-title').value.trim();
+  if (!title) { showToast('Adicione um título'); return; }
+  posts.push({id:Date.now(),title,format:document.getElementById('post-format').value,tema:document.getElementById('post-tema').value,date:document.getElementById('post-date').value,priority:document.getElementById('post-priority').value,status:'ideia',obs:document.getElementById('post-obs').value});
+  document.getElementById('post-title').value='';
+  document.getElementById('post-date').value='';
+  document.getElementById('post-obs').value='';
+  closeModal('modal-post');
+  renderKanban(); renderCalendar(); updateStats(); persistPosts();
+  showToast('Post adicionado ao funil');
+}
+
+function renderKanban() {
+  const active = posts.filter(p=>p.status!=='publicado');
+  document.getElementById('kanban-board').innerHTML = Object.keys(COL_COLORS).map(colId => {
+    const colPosts = active.filter(p=>p.status===colId);
+    const c = COL_COLORS[colId];
+    return `
+      <div class="kanban-col" id="col-${colId}" style="background:${c}44;border:1px solid ${c}99"
+        ondragover="onDragOver(event,'${colId}')" ondrop="onDrop(event,'${colId}')" ondragleave="onDragLeave(event)">
+        <div class="kanban-col-header">
+          <span class="col-title">${STATUS_LABELS[colId]}</span>
+          <span class="col-count">${colPosts.length}</span>
+        </div>
+        ${colPosts.map(p => {
+          const {pct} = clPct(p.id, p.format);
+          return `
+            <div class="kanban-card" id="kcard-${p.id}" draggable="true"
+              ondragstart="onDragStart(event,${p.id})" ondragend="onDragEnd(event)">
+              <div class="kanban-card-title" onclick="openDetail(${p.id})">${p.title}</div>
+              <div class="kanban-card-meta">
+                <span class="post-pill ${FMT_CLASS[p.format]||''}" style="margin:0;display:inline-block;font-size:9px">${p.format}</span>
+                <span class="priority-dot priority-${p.priority}"></span>
+                ${p.date?`<span class="kanban-card-date">${fmt(p.date)}</span>`:''}
+              </div>
+              ${pct>0?`<div style="margin-top:5px;height:3px;background:var(--border);border-radius:2px"><div style="height:3px;border-radius:2px;background:${pct===100?'var(--green)':'var(--rose)'};width:${pct}%"></div></div>`:''}
+              <div class="card-actions">
+                <button class="card-btn" onclick="movePost(${p.id},-1)">← Voltar</button>
+                <button class="card-btn" onclick="openDetail(${p.id})">✦ Ver</button>
+                <button class="card-btn" onclick="movePost(${p.id},1)">Avançar →</button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+        <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:6px;font-size:11px" onclick="openNewPostModal()">+ Adicionar</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function movePost(id, dir) {
+  const p = posts.find(x=>x.id===id);
+  if (!p) return;
+  const active = STATUS_ORDER.filter(s=>s!=='publicado');
+  const i = active.indexOf(p.status);
+  const ni = i+dir;
+  if (ni<0) { showToast('Já está na primeira etapa'); return; }
+  if (ni>=active.length) {
+    p.status='publicado';
+    if (!p.date) p.date = new Date().toISOString().split('T')[0];
+    renderKanban(); renderCalendar(); updateStats(); persistPosts();
+    showToast('Arquivado como Publicado ✦');
+    return;
+  }
+  p.status = active[ni];
+  renderKanban(); updateStats(); persistPosts();
+  showToast(`${dir>0?'Avançado':'Retornado'} para: ${STATUS_LABELS[p.status]}`);
+}
+
+// ─── DRAG & DROP ─────────────────────────────────────
+let dragId = null;
+function onDragStart(e,id) {
+  dragId=id; e.dataTransfer.effectAllowed='move';
+  setTimeout(()=>document.getElementById('kcard-'+id)?.classList.add('dragging'),0);
+}
+function onDragEnd() {
+  document.getElementById('kcard-'+dragId)?.classList.remove('dragging');
+  document.querySelectorAll('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
+}
+function onDragOver(e,colId) {
+  e.preventDefault(); e.dataTransfer.dropEffect='move';
+  document.querySelectorAll('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
+  document.getElementById('col-'+colId)?.classList.add('drag-over');
+}
+function onDragLeave(e) { if(!e.currentTarget.contains(e.relatedTarget)) e.currentTarget.classList.remove('drag-over'); }
+function onDrop(e,colId) {
+  e.preventDefault();
+  document.querySelectorAll('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
+  if (dragId==null) return;
+  const p = posts.find(x=>x.id===dragId);
+  if (p && p.status!==colId) { p.status=colId; renderKanban(); updateStats(); persistPosts(); showToast(`Movido para: ${STATUS_LABELS[colId]}`); }
+  dragId=null;
+}
+
+// ═══════════════════════════════════════════════════════
+//  ARCHIVE
+// ═══════════════════════════════════════════════════════
+function renderArchive(filterFmt) {
+  if (filterFmt!==undefined) archiveFilterFormat=filterFmt;
+  const archived = posts.filter(p=>p.status==='publicado');
+  document.getElementById('archive-count').textContent = `${archived.length} post${archived.length!==1?'s':''} publicado${archived.length!==1?'s':''}`;
+  const formats = ['all',...new Set(archived.map(p=>p.format))];
+  document.getElementById('archive-filters').innerHTML = formats.map(f=>`
+    <span class="filter-chip ${archiveFilterFormat===f?'active':''}" onclick="renderArchive('${f}')">
+      ${f==='all'?'Todos':f.charAt(0).toUpperCase()+f.slice(1)}
+    </span>
+  `).join('');
+  const filtered = archiveFilterFormat==='all' ? archived : archived.filter(p=>p.format===archiveFilterFormat);
+  const tbody = document.getElementById('archive-body');
+  const empty = document.getElementById('archive-empty');
+  if (!filtered.length) {
+    tbody.innerHTML='';
+    empty.innerHTML='<div class="empty-state"><div class="emoji">◬</div><p>Nenhum post publicado ainda.<br>Quando um post for arquivado como Publicado, aparecerá aqui.</p></div>';
+    return;
+  }
+  empty.innerHTML='';
+  const sorted = [...filtered].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  tbody.innerHTML = sorted.map(p=>{
+    const {done,total,pct} = clPct(p.id,p.format);
+    return `
+      <tr onclick="openDetail(${p.id})">
+        <td style="font-weight:500">${p.title}${p.obs?`<div style="font-size:11px;color:var(--text-muted);margin-top:1px">${p.obs}</div>`:''}</td>
+        <td><span class="post-pill ${FMT_CLASS[p.format]||''}" style="margin:0;display:inline-block">${p.format}</span></td>
+        <td><span class="idea-tag ${TAG_CLASS[p.tema]||''}" style="margin:0">${p.tema}</span></td>
+        <td style="color:var(--text-muted);white-space:nowrap">${fmt(p.date)||'—'}</td>
+        <td class="archive-cl-cell">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:44px;min-width:44px;height:4px;background:var(--border);border-radius:2px;flex-shrink:0">
+              <div style="height:4px;border-radius:2px;background:${pct===100?'var(--green)':'var(--rose)'};width:${pct}%"></div>
+            </div>
+            <span style="font-size:11px;color:var(--text-muted);flex-shrink:0">${pct}%</span>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  CALENDAR
+// ═══════════════════════════════════════════════════════
+function renderCalendar() {
+  const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('month-display').textContent=`${MONTHS[currentMonth]} ${currentYear}`;
+  document.getElementById('cal-headers').innerHTML=DAYS.map(d=>`<div class="cal-day-header">${d}</div>`).join('');
+  const firstDay=new Date(currentYear,currentMonth,1).getDay();
+  const daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
+  const daysInPrev=new Date(currentYear,currentMonth,0).getDate();
+  let cells='';
+  for(let i=firstDay-1;i>=0;i--) cells+=`<div class="cal-day other-month"><div class="cal-day-num">${daysInPrev-i}</div></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday=d===TODAY.getDate()&&currentMonth===TODAY.getMonth()&&currentYear===TODAY.getFullYear();
+    const dateStr=toIso(d,currentMonth,currentYear);
+    const dayPosts=posts.filter(p=>p.date===dateStr);
+    const pills=dayPosts.slice(0,3).map(p=>`<div class="post-pill ${FMT_CLASS[p.format]||''}" onclick="openDetail(${p.id})" title="${p.title}">${p.title.substring(0,13)}${p.title.length>13?'…':''}</div>`).join('');
+    const extra=dayPosts.length>3?`<div style="font-size:9px;color:var(--text-light)">+${dayPosts.length-3} mais</div>`:'';
+    cells+=`<div class="cal-day ${isToday?'today-cell':''}"><div class="cal-day-num">${d}</div>${pills}${extra}</div>`;
+  }
+  const rem=7-((firstDay+daysInMonth)%7);
+  if(rem<7) for(let i=1;i<=rem;i++) cells+=`<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
+  document.getElementById('cal-body').innerHTML=cells;
+}
+function changeMonth(dir){
+  currentMonth+=dir;
+  if(currentMonth>11){currentMonth=0;currentYear++;}
+  if(currentMonth<0){currentMonth=11;currentYear--;}
+  renderCalendar();
+}
+
+// ═══════════════════════════════════════════════════════
+//  CHECKLISTS (standalone)
+// ═══════════════════════════════════════════════════════
+function renderChecklists(){
+  document.getElementById('checklists-container').innerHTML=Object.entries(CL).map(([key,cl])=>{
+    if(!standaloneState[key]) standaloneState[key]={};
+    const done=Object.values(standaloneState[key]).filter(Boolean).length;
+    const pct=Math.round(done/cl.items.length*100);
+    return `
+      <div class="checklist-section">
+        <div class="checklist-header">
+          <span class="format-badge ${cl.badge}">${cl.label}</span>
+          <button class="btn btn-ghost btn-sm" onclick="resetSc('${key}')">Resetar</button>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="sc-bar-${key}" style="width:${pct}%"></div></div>
+        <div>${cl.items.map((item,idx)=>`
+          <div class="check-item">
+            <input type="checkbox" id="sc-${key}-${idx}" ${standaloneState[key][idx]?'checked':''} onchange="updateSc('${key}',${cl.items.length})">
+            <div>
+              <div class="check-label ${standaloneState[key][idx]?'done':''}" id="sc-lbl-${key}-${idx}">${item.t}</div>
+              ${item.s?`<div class="check-sub">${item.s}</div>`:''}
+            </div>
+          </div>
+        `).join('')}</div>
+      </div>
+    `;
+  }).join('');
+}
+function updateSc(key,total){
+  CL[key].items.forEach((_,idx)=>{
+    const cb=document.getElementById(`sc-${key}-${idx}`);
+    standaloneState[key][idx]=!!cb?.checked;
+    document.getElementById(`sc-lbl-${key}-${idx}`)?.classList.toggle('done',!!cb?.checked);
+  });
+  const done=Object.values(standaloneState[key]).filter(Boolean).length;
+  document.getElementById(`sc-bar-${key}`).style.width=Math.round(done/total*100)+'%';
+  persistScState();
+}
+function resetSc(key){ standaloneState[key]={}; renderChecklists(); persistScState(); showToast('Checklist resetado'); }
+
+// ═══════════════════════════════════════════════════════
+//  METRICS
+// ═══════════════════════════════════════════════════════
+function renderMetrics(){
+  const all=posts;
+  const bars=(data,colors)=>{
+    const max=Math.max(...Object.values(data).map(d=>d.count),1);
+    return Object.entries(data).map(([k,d])=>`
+      <div class="bar-row">
+        <span class="bar-label">${d.label}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${Math.round(d.count/max*100)}%;background:${colors[k]||'var(--rose)'}"></div></div>
+        <span class="bar-val">${d.count}</span>
+      </div>
+    `).join('');
+  };
+  const fmtData={};
+  ['carrossel','reel','estatico','story'].forEach(f=>{fmtData[f]={label:f.charAt(0).toUpperCase()+f.slice(1),count:all.filter(p=>p.format===f).length};});
+  document.getElementById('metric-formats').innerHTML=bars(fmtData,FMT_COLORS);
+  const temaData={};
+  ['histeroscopia','fertilidade','educativo','depoimento','promo','rotina'].forEach(t=>{const c=all.filter(p=>p.tema===t).length;if(c>0)temaData[t]={label:t.charAt(0).toUpperCase()+t.slice(1),count:c};});
+  document.getElementById('metric-temas').innerHTML=bars(temaData,TAG_COLORS);
+  const stColors={ideia:'var(--amber)',roteiro:'var(--blue)',producao:'var(--purple)',revisao:'var(--rose)',aprovacao:'var(--sage)',agendado:'var(--green)',publicado:'#5C8C6A'};
+  const statusData={};
+  STATUS_ORDER.forEach(s=>{statusData[s]={label:STATUS_LABELS[s],count:all.filter(p=>p.status===s).length};});
+  document.getElementById('metric-status').innerHTML=bars(statusData,stColors);
+}
+
+// ═══════════════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════════════
+function renderDashboard(){
+  updateStats();
+  const upcoming=[...posts].filter(p=>p.date&&p.status!=='publicado').sort((a,b)=>(a.date||'').localeCompare(b.date||'')).slice(0,6);
+  document.getElementById('upcoming-posts').innerHTML=upcoming.length
+    ?upcoming.map(p=>`
+        <div style="display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openDetail(${p.id})">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.title}</div>
+            <div style="font-size:10px;color:var(--text-light);margin-top:2px">${p.date?fmt(p.date):'sem data'} · ${STATUS_LABELS[p.status]}</div>
+          </div>
+          <span class="post-pill ${FMT_CLASS[p.format]||''}" style="margin:0;display:inline-block;flex-shrink:0">${p.format}</span>
+          <span class="priority-dot priority-${p.priority}" style="flex-shrink:0"></span>
+        </div>
+      `).join('')
+    :'<div class="empty-state"><div class="emoji">◻</div><p>Nenhum post com data agendada.<br>Adicione posts no funil.</p></div>';
+}
+function updateStats(){
+  document.getElementById('stat-ideas').textContent=ideas.length;
+  document.getElementById('stat-posts').textContent=posts.filter(p=>p.status!=='publicado').length;
+  document.getElementById('stat-prod').textContent=posts.filter(p=>p.status==='producao'||p.status==='roteiro').length;
+  document.getElementById('stat-pub').textContent=posts.filter(p=>p.status==='publicado').length;
+}
+
+// ═══════════════════════════════════════════════════════
+//  SPEECH RECOGNITION  (funciona em HTTPS/localhost)
+// ═══════════════════════════════════════════════════════
+let recognition = null;
+let recTarget = null; // 'title' | 'desc'
+let isRecording = false;
+
+function toggleMic(target) {
+  if (isRecording && recTarget === target) {
+    stopMic();
+  } else {
+    if (isRecording) stopMic();
+    startMic(target);
+  }
+}
+
+function startMic(target) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Ditado de voz não suportado. Use Chrome ou Safari.'); return; }
+  recTarget = target;
+  const boundTarget = target; // captured in closure — immune to later changes in recTarget
+
+  recognition = new SR();
+  recognition.lang = 'pt-BR';
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onresult = (e) => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      e.results[i].isFinal ? (final += t) : (interim += t);
+    }
+    if (final) {
+      const fieldId = boundTarget === 'title' ? 'idea-title-input'
+                    : boundTarget === 'quick' ? 'quick-idea'
+                    : 'idea-desc-input';
+      const field = document.getElementById(fieldId);
+      if (field) {
+        const sep = field.value && !field.value.endsWith(' ') ? ' ' : '';
+        field.value += sep + final.trim();
+      }
+    }
+    const badge = document.getElementById(boundTarget === 'quick' ? 'mic-badge-quick' : 'mic-badge');
+    const txt = document.getElementById(boundTarget === 'quick' ? 'mic-interim-quick' : 'mic-interim-text');
+    if (badge && txt) {
+      if (interim) { txt.textContent = interim.slice(0,50)+(interim.length>50?'…':''); badge.classList.add('show'); }
+      else { txt.textContent = 'ouvindo…'; }
+    }
+  };
+
+  recognition.onerror = (e) => {
+    if (e.error === 'not-allowed') {
+      showToast('Permissão negada. Clique no cadeado na barra do navegador e permita o microfone.');
+    } else if (e.error !== 'no-speech') {
+      showToast('Erro no microfone: ' + e.error);
+    }
+    stopMic();
+  };
+
+  recognition.onend = () => {
+    if (isRecording) { try { recognition.start(); } catch(_) {} }
+  };
+
+  try {
+    recognition.start();
+    isRecording = true;
+    setMicUI(target, true);
+  } catch(e) {
+    showToast('Não foi possível iniciar. Acesse pelo HTTPS.');
+  }
+}
+
+function stopMic() {
+  isRecording = false;
+  if (recognition) { try { recognition.stop(); } catch(_) {} recognition = null; }
+  setMicUI(recTarget, false);
+  document.getElementById('mic-badge')?.classList.remove('show');
+  document.getElementById('mic-badge-quick')?.classList.remove('show');
+  recTarget = null;
+  showToast('Ditado finalizado ✦');
+}
+
+function setMicUI(target, active) {
+  const btnId = target === 'title' ? 'mic-title-btn' : target === 'quick' ? 'mic-quick-btn' : 'mic-desc-btn';
+  const lblId = target === 'title' ? 'mic-title-label' : target === 'quick' ? 'mic-quick-label' : 'mic-desc-label';
+  const btn = document.getElementById(btnId);
+  const lbl = document.getElementById(lblId);
+  if (!btn) return;
+  if (active) {
+    btn.classList.add('recording');
+    if (lbl) lbl.textContent = 'Parar';
+    const icon = btn.childNodes[0];
+    if (icon && icon.nodeType === Node.TEXT_NODE) icon.textContent = '⏹ ';
+  } else {
+    btn.classList.remove('recording');
+    if (lbl) lbl.textContent = 'Ditar';
+    const icon = btn.childNodes[0];
+    if (icon && icon.nodeType === Node.TEXT_NODE) icon.textContent = '🎙 ';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+initFirebase();
+</script>
+</body>
+</html>
